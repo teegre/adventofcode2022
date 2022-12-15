@@ -1,5 +1,6 @@
-""" -- part one --- """
+""" Rock Paper Scissors """
 
+# -- part one --
 # Column 1: opponent | Column 2: player
 #
 # A == X == Rock     (1 pt)
@@ -23,3 +24,26 @@ for line in inp:
   score += pts[p2]
   scores.append(score)
 print('part one:', sum(scores))
+
+# -- part two --
+# X lose
+# Y draw
+# Z win
+
+scores = []
+for line in inp:
+  p1,p2 = line.split()
+  p1 = rps2[p1]
+  match p2:
+    case 'X': # lose
+      g = list(rps1.keys())[list(rps1.values()).index(p1)]
+      score = pts[g]
+      # scores.append((p1, p2, g, score))
+    case 'Y': # draw
+      score = 3 + pts[p1]
+      # scores.append((p1, p2, p1, score))
+    case 'Z': # win
+      score = 6 + pts[rps1[p1]]
+      # scores.append((p1, p2, rps1[p1], score))
+  scores.append(score)
+print('part two:', sum(scores))
