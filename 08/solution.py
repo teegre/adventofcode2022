@@ -13,9 +13,9 @@ test = [
     '35390'
 ]
 
+# Part one
 h,w = len(inp), len(inp[0])
 count = h+(h-1)+(h-1)+(h-2)
-c = 0
 for y,t1 in enumerate(inp[1:-1],1):
   for x,t2 in enumerate(t1[1:-1],1):
     t2 = int(t2)
@@ -34,3 +34,22 @@ for y,t1 in enumerate(inp[1:-1],1):
       count += 1
     # print()
 print('part one:', count)
+
+# Part two
+h,w = len(test), len(test[0])
+for y,t1 in enumerate(test[1:-1],1):
+  for x,t2 in enumerate(t1[1:-1],1):
+    t2 = int(t2)
+    vdist = [int(test[i][x]) if i!=y else 'T' for i in range(h)]
+    hdist = [int(test[y][i]) if i!=x else 'T' for i in range(w)]
+    print(f'({y},{x}) {t2}', 'v', vdist, 'h', hdist, end=' | ') 
+    i,j = vdist.index('T'), hdist.index('T')
+    u = vdist[i-1::-1]
+    d = vdist[i+1:]
+    l = hdist[j-1::-1]
+    r = hdist[j+1:]
+    up = sum(1 if a < t2 and a-b != 0 else 0 for a,b in zip(u,u[1:]))+1
+    dw = sum(1 if a < t2 and a-b != 0 else 0 for a,b in zip(d,d[1:]))+1
+    lt = sum(1 if a < t2 and a-b != 0 else 0 for a,b in zip(l,l[1:]))+1
+    rt = sum(1 if a < t2 and a-b != 0 else 0 for a,b in zip(r,r[1:]))+1
+    print(f'↑ {up}, ↓ {dw}, ← {lt}, → {rt} == {up*dw*lt*rt}')
