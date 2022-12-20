@@ -11,11 +11,12 @@ class Knots:
     self.hx = headx
     self.ty = taily
     self.tx = tailx
+    self.tpos = set()
   def move_up(self):
-    hy = self.hy
-    hx = self.hx
     self.hy += 1
-
+    if self.tx != self.hx:
+      self.tx = self.hx
+      self.tpos.add((self.ty, self.tx))
   @property
   def pos(self):
     return self.hy, self.hx, self.ty, self.tx
