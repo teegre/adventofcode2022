@@ -1,7 +1,5 @@
 """ Day 08 - Treetop Tree House """
 
-from itertools import groupby
-
 with open('input.txt', 'r', encoding='utf-8') as f:
   inp = [line[:-1] for line in f.readlines()]
 
@@ -36,20 +34,35 @@ for y,t1 in enumerate(inp[1:-1],1):
 print('part one:', count)
 
 # Part two
-h,w = len(test), len(test[0])
-for y,t1 in enumerate(test[1:-1],1):
+
+def count_viewed(o,t):
+  v = 0
+  c = 0
+  while v < len(t):
+    if t[v] >= o:
+      return c+1
+    else:
+      c += 1
+    v += 1
+  return c
+
+h,w = len(inp), len(inp[0])
+count = []
+for y,t1 in enumerate(inp[1:-1],1):
   for x,t2 in enumerate(t1[1:-1],1):
     t2 = int(t2)
-    vdist = [int(test[i][x]) if i!=y else 'T' for i in range(h)]
-    hdist = [int(test[y][i]) if i!=x else 'T' for i in range(w)]
-    print(f'({y},{x}) {t2}', 'v', vdist, 'h', hdist, end=' | ') 
+    vdist = [int(inp[i][x]) if i!=y else 'T' for i in range(h)]
+    hdist = [int(inp[y][i]) if i!=x else 'T' for i in range(w)]
+    # print(f'({y},{x}) {t2}', 'v', vdist, 'h', hdist, end=' | ') 
     i,j = vdist.index('T'), hdist.index('T')
     u = vdist[i-1::-1]
     d = vdist[i+1:]
     l = hdist[j-1::-1]
     r = hdist[j+1:]
-    up = sum(1 if a < t2 and a-b != 0 else 0 for a,b in zip(u,u[1:]))+1
-    dw = sum(1 if a < t2 and a-b != 0 else 0 for a,b in zip(d,d[1:]))+1
-    lt = sum(1 if a < t2 and a-b != 0 else 0 for a,b in zip(l,l[1:]))+1
-    rt = sum(1 if a < t2 and a-b != 0 else 0 for a,b in zip(r,r[1:]))+1
-    print(f'↑ {up}, ↓ {dw}, ← {lt}, → {rt} == {up*dw*lt*rt}')
+    up = count_viewed(t2,u)
+    dw = count_viewed(t2,d)
+    lt = count_viewed(t2,l)
+    rt = count_viewed(t2,r)
+    count.append(up*dw*lt*rt)
+    # print(f'↑ {up}, ↓ {dw}, ← {lt}, → {rt} == {up*dw*lt*rt}')
+print('part two:', max(count))
