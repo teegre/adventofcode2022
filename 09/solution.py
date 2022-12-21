@@ -17,28 +17,28 @@ class Knots:
     """ Move head up and record tail positions. """
     self.hy += dist
     if self.tx != self.hx:
-      for x in range(self.tx, self.hx+1):
+      for x in range(self.tx, self.hx, 1 if self.tx < self.hx else -1):
         self.tpos.add((self.ty, x))
       self.tx = self.hx
   def move_down(self, dist=1):
     """ Move head down and record tail positions. """
     self.hy -= dist
     if self.tx != self.hx:
-      for x in range(self.tx, self.hx+1):
+      for x in range(self.tx, self.hx, 1 if self.tx < self.hx else -1):
         self.tpos.add((self.ty, x))
       self.tx = self.hx
   def move_right(self, dist=1):
     """ Move head right and record tail positions. """
     self.hx += dist
     if self.ty != self.hy:
-      for y in range(self.ty, self.hy+1):
+      for y in range(self.ty, self.hy, 1 if self.ty < self.hy else -1):
         self.tpos.add((y, self.tx))
       self.ty = self.hy
   def move_left(self, dist=1):
     """ Move head left and record tail positions """
     self.hx -= dist
     if self.ty != self.hy:
-      for y in range(self.ty,self.hy+1):
+      for y in range(self.ty, self.hy, 1 if self.ty < self.hy else -1):
         self.tpos.add((y, self.tx))
       self.ty = self.hy
   @property
