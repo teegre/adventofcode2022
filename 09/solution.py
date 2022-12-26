@@ -13,42 +13,34 @@ class Knots:
     self.ty = taily
     self.tx = tailx
     self.tpos = { (self.ty,self.tx) }
-  def move_up(self, dist=1):
-    """ Move head up and record tail positions. """
-    self.hy += dist
-    for y in range(self.ty, self.ty+dist, 1 if self.ty < self.ty+dist else -1):
-      if y == self.ty+1:
-        self.tx = self.hx
-      if self.tx == self.hx:
-        self.tpos.add((y, self.hx))
-    self.ty += dist-1
-  def move_down(self, dist=1):
-    """ Move head down and record tail positions. """
-    self.hy -= dist
-    for y in range(self.ty, self.ty-dist, 1 if self.ty < self.ty-dist else -1):
-      if y == self.ty-1:
-        self.tx = self.hx
-      if self.tx == self.hx:
-        self.tpos.add((y, self.hx))
-    self.ty -= dist-1
-  def move_right(self, dist=1):
-    """ Move head right and record tail positions. """
-    self.hx += dist
-    for x in range(self.tx, self.tx+dist, 1 if self.tx < self.hx+dist else -1):
-      if x == self.tx+1:
+  def right(self, dist=1):
+    for _ in range(1, dist+1):
+      self.hx += 1
+      if self.hx - self.tx == 2:
+        self.tx += 1
         self.ty = self.hy
-      if self.ty == self.hy:
-        self.tpos.add((self.ty, x))
-    self.tx += dist-1
-  def move_left(self, dist=1):
-    """ Move head left and record tail positions """
-    self.hx -= dist
-    for x in range(self.tx, self.tx-dist, 1 if self.tx < self.hx-dist else -1):
-      if x == self.tx-1:
+        self.tpos.add((self.ty, self.tx))
+  def left(self, dist=1):
+    for _ in range(1, dist+1):
+      self.hx -= 1
+      if self.tx - self.hx == 2:
+        self.tx -= 1
         self.ty = self.hy
-      if self.ty == self.hy:
-        self.tpos.add((self.ty, x))
-    self.tx -= dist-1
+        self.tpos.add((self.ty, self.tx))
+  def up(self, dist=1):
+    for _ in range(1, dist+1):
+      self.hy += 1
+      if self.hy - self.ty == 2:
+        self.ty += 1
+        self.tx = self.hx
+        self.tpos.add((self.ty, self.tx))
+  def down(self, dist=1):
+    for _ in range(1, dist+1):
+      self.hy -= 1
+      if self.ty - self.hy == 2:
+        self.ty -= 1
+        self.tx = self.hx
+        self.tpos.add((self.ty, self.tx))
   @property
   def pos(self):
     """ Return current position. """
@@ -62,24 +54,24 @@ class Knots:
   def __str__(self):
     return f'head: y={self.hy} x={self.hx} | tail: y={self.ty} x={self.tx}'
   def __repr__(self):
-    return f'knots: [head:({self.hy},{self.hx})|tail:({self.ty},{self.tx})]'
+    return f'knots: [tail:({self.ty},{self.tx}) | head:({self.hy},{self.hx})]'
 
 knots = Knots()
 
 def move():
   """ Move according to the instructions. """
-  for m in test:
+  for m in inp:
     dir,dist = m.split()
     dist = int(dist)
     match dir:
       case 'R':
-        knots.move_right(dist)
+        knots.right(dist)
       case 'L':
-        knots.move_left(dist)
+        knots.left(dist)
       case 'U':
-        knots.move_up(dist)
+        knots.up(dist)
       case 'D':
-        knots.move_down(dist)
+        knots.down(dist)
 
 move()
 print('part one:', len(knots.tail_pos))
