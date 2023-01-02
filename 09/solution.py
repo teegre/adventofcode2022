@@ -65,7 +65,7 @@ class Knot:
         self.child.y = self.y
         self.child.right()
       if abs(self.y - self.child.y) == 2:
-        self.child.x += 1
+        self.child.x = self.x
         if self.y > self.child.y:
           self.child.up()
         elif self.y < self.child.y:
@@ -126,6 +126,7 @@ class Knot:
           self.child.left()
 
   def reset(self):
+    """ Reset knot and its children coordinate """
     self.y, self.x = 0, 0
     self.pos = {(0,0)}
     if self.child:
@@ -133,6 +134,7 @@ class Knot:
 
   @property
   def knots(self):
+    """ List of knots """
     ch = []
     ch.append(self)
     if self.child:
@@ -141,20 +143,29 @@ class Knot:
 
   @property
   def root(self):
+    """ Root knot """
     if self.parent:
       return self.parent.root
     return self
 
   @property
   def index(self):
+    """ Knot index """
     return self.root.knots.index(self)
 
   @property
   def last(self):
+    """ Last node """
     return self[-1]
 
   @property
+  def coord(self):
+    """ Knot coordinates as a tuple """
+    return self.y, self.x
+
+  @property
   def r_knots(self):
+    """ Reversed list of knots """
     return list(reversed(self.knots))
 
   @property
@@ -163,6 +174,16 @@ class Knot:
     tpos = list(self[-1].pos)
     tpos.sort()
     return tpos
+
+  @property
+  def min(self):
+    """ Return minimum knot coordinates higher than (0,0) """
+    min_k = min(self)
+    if min_k.coord == (0,0):
+      for k in reversed(self):
+        if k.coord > min_k.coord:
+          return k
+    return min_k
 
   def __getitem__(self,  index):
     return self.root.knots[index]
@@ -174,6 +195,12 @@ class Knot:
 
   def __len__(self):
     return len(self.knots)
+
+  def __lt__(self, other):
+    return self.coord < other.coord
+
+  def __gt__(self, other):
+    return self.coord > other.coord
 
   def __str__(self):
     return f'{self.name}: ({self.y},{self.x})'
