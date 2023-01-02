@@ -126,7 +126,7 @@ class Knot:
           self.child.left()
 
   def reset(self):
-    """ Reset knot and its children coordinate """
+    """ Reset knot and its children coordinates """
     self.y, self.x = 0, 0
     self.pos = {(0,0)}
     if self.child:
@@ -177,13 +177,16 @@ class Knot:
 
   @property
   def min(self):
-    """ Return minimum knot coordinates higher than (0,0) """
+    """
+    Return knot with coordinates higher than (0,0) if any
+    or return first child of root knot otherwise
+    """
     min_k = min(self)
     if min_k.coord == (0,0):
       for k in reversed(self):
         if k.coord > min_k.coord:
           return k
-    return min_k
+    return min_k.child if min_k.child else min_k
 
   def __getitem__(self, index):
     return self.root.knots[index]
