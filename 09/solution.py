@@ -47,32 +47,38 @@ class Knot:
     self.parent = None
     self.child = None
     self.pos = {(y, x)}
+
   def add(self, child):
+    """ Add a child knot """
     self[-1].child = child
     child.parent = self[-2]
+
   def right(self, dist=1):
+    """ Move knot to the right """
     for _ in range(dist):
       self.x += 1
       if not self.child:
         self.pos.add((self.y, self.x))
         continue
-      # print('R', self, '→', self.child)
+      print('R', self, '→', self.child)
       if self.x - self.child.x == 2:
         self.child.y = self.y
         self.child.right()
       if abs(self.y - self.child.y) == 2:
-        self.child.x = self.x
+        self.child.x += 1
         if self.y > self.child.y:
           self.child.up()
         elif self.y < self.child.y:
           self.child.down()
+
   def left(self, dist=1):
+    """ Move knot to the left """
     for _ in range(dist):
       self.x -= 1
       if not self.child:
         self.pos.add((self.y, self.x))
         continue
-      # print('L', self, '→', self.child)
+      print('L', self, '→', self.child)
       if self.child.x - self.x == 2:
         self.child.y = self.y
         self.child.left()
@@ -82,43 +88,49 @@ class Knot:
           self.child.up()
         elif self.y > self.child.y:
           self.child.down()
+
   def up(self, dist=1):
+    """ Move knot up """
     for _ in range(dist):
       self.y += 1
       if not self.child:
         self.pos.add((self.y, self.x))
         continue
-      # print('U', self, '→', self.child)
+      print('U', self, '→', self.child)
       if self.y - self.child.y == 2:
         self.child.x = self.x
         self.child.up()
       if abs(self.x - self.child.x) == 2:
-        self.child.y = self.y
+        self.child.y += 1
         if self.x > self.child.x:
           self.child.right()
         elif self.x < self.child.x:
           self.child.left()
+
   def down(self, dist=1):
+    """ Move knot down """
     for _ in range(dist):
       self.y -= 1
       if not self.child:
         self.pos.add((self.y, self.x))
         continue
-      # print('U', self, '→', self.child)
+      print('D', self, '→', self.child)
       if self.child.y - self.y == 2:
         self.child.x = self.x
         self.child.down()
       if abs(self.x - self.child.x) == 2:
-        self.child.y = self.y
+        self.child.y -= 1
         if self.x < self.child.x:
           self.child.right()
         elif self.x > self.child.x:
           self.child.left()
+
   def reset(self):
     self.y, self.x = 0, 0
     self.pos = {(0,0)}
     if self.child:
       self.child.reset()
+
   @property
   def knots(self):
     ch = []
@@ -126,33 +138,46 @@ class Knot:
     if self.child:
       ch.extend(self.child.knots)
     return ch
+
   @property
   def root(self):
     if self.parent:
       return self.parent.root
     return self
+
   @property
   def index(self):
     return self.root.knots.index(self)
+
+  @property
+  def last(self):
+    return self[-1]
+
   @property
   def r_knots(self):
     return list(reversed(self.knots))
+
   @property
   def positions(self):
     """ Return a sorted list of recorded tail positions """
     tpos = list(self[-1].pos)
     tpos.sort()
     return tpos
+
   def __getitem__(self,  index):
     return self.root.knots[index]
+
   def __iter__(self):
     knots = self.knots
     for k in knots:
       yield k
+
   def __len__(self):
     return len(self.knots)
+
   def __str__(self):
     return f'{self.name}: ({self.y},{self.x})'
+
   def __repr__(self):
     return f'{self.name}: ({self.y},{self.x})'
 
@@ -166,7 +191,7 @@ rope = make_rope()
 
 def move():
   """ Move according to the instructions. """
-  for m in test:
+  for m in inp:
     d,dist = m.split()
     dist = int(dist)
     match d:
