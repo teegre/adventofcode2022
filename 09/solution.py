@@ -55,12 +55,12 @@ class Knot:
 
   def right(self, dist=1):
     """ Move knot to the right """
+    print('R', self, '→', self.child)
     for _ in range(dist):
       self.x += 1
       if not self.child:
         self.pos.add((self.y, self.x))
         continue
-      print('R', self, '→', self.child)
       if self.x - self.child.x == 2:
         self.child.y = self.y
         self.child.right()
@@ -73,12 +73,12 @@ class Knot:
 
   def left(self, dist=1):
     """ Move knot to the left """
+    print('L', self, '→', self.child)
     for _ in range(dist):
       self.x -= 1
       if not self.child:
         self.pos.add((self.y, self.x))
         continue
-      print('L', self, '→', self.child)
       if self.child.x - self.x == 2:
         self.child.y = self.y
         self.child.left()
@@ -91,17 +91,17 @@ class Knot:
 
   def up(self, dist=1):
     """ Move knot up """
+    print('U', self, '→', self.child)
     for _ in range(dist):
       self.y += 1
       if not self.child:
         self.pos.add((self.y, self.x))
         continue
-      print('U', self, '→', self.child)
       if self.y - self.child.y == 2:
         self.child.x = self.x
         self.child.up()
       if abs(self.x - self.child.x) == 2:
-        self.child.y += 1
+        self.child.y = self.y
         if self.x > self.child.x:
           self.child.right()
         elif self.x < self.child.x:
@@ -109,17 +109,17 @@ class Knot:
 
   def down(self, dist=1):
     """ Move knot down """
+    print('D', self, '→', self.child)
     for _ in range(dist):
       self.y -= 1
       if not self.child:
         self.pos.add((self.y, self.x))
         continue
-      print('D', self, '→', self.child)
       if self.child.y - self.y == 2:
         self.child.x = self.x
         self.child.down()
       if abs(self.x - self.child.x) == 2:
-        self.child.y -= 1
+        self.child.y = self.y
         if self.x < self.child.x:
           self.child.right()
         elif self.x > self.child.x:
@@ -185,7 +185,7 @@ class Knot:
           return k
     return min_k
 
-  def __getitem__(self,  index):
+  def __getitem__(self, index):
     return self.root.knots[index]
 
   def __iter__(self):
