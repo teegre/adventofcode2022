@@ -1,4 +1,4 @@
-""" Day 09 - Rope Bridge """
+"ini"" Day 09 - Rope Bridge """
 
 with open('input.txt', 'r', encoding='utf-8') as f:
   inp = [ l[:-1] for l in f.readlines() ]
@@ -55,88 +55,99 @@ class Knot:
 
   def right(self, dist=1):
     """ Move knot to the right """
-    print(f'>> R{dist}', self)
+    # print(f'>> R{dist}', self)
     for _ in range(dist):
       self.x += 1
       if not self.child:
         self.pos.add((self.y, self.x))
         continue
-      if self.x - self.child.x == 2:
-        print(self, '→', self.child, 'y+R')
-        self.child.y = self.y
-        self.child.right()
       if abs(self.y - self.child.y) == 2:
-        print(self, '→', self.child, 'x+', end='')
-        self.child.x = self.x
+        # print(self, '→', self.child, 'x+', end='')
+        if self.child.x == 0:
+          self.child.x = 1
+        else:
+          self.child.x = self.x
         if self.y > self.child.y:
-          print('U')
+          # print('U')
           self.child.up()
         elif self.y < self.child.y:
-          print('D')
+          # print('D')
           self.child.down()
-    print(f'R{dist}', self, '<<')
+      elif self.x - self.child.x == 2:
+        # print(self, '→', self.child, 'y+R')
+        self.child.y = self.y
+        self.child.right()
+    # print(f'R{dist}', self, '<<')
 
   def left(self, dist=1):
     """ Move knot to the left """
-    print(f'>> L{dist}', self)
+    # print(f'>> L{dist}', self)
     for _ in range(dist):
       self.x -= 1
       if not self.child:
         self.pos.add((self.y, self.x))
         continue
-      if self.child.x - self.x == 2:
-        self.child.y = self.y
-        self.child.left()
       if abs(self.y - self.child.y) == 2:
-        if abs(self.child.x - self.x) == 1:
+        if self.child.x == 0:
+          self.child.x = -1
+        else:
           self.child.x = self.x
         if self.y < self.child.y:
           self.child.up()
         elif self.y > self.child.y:
           self.child.down()
-    print(f'L{dist}', self, '<<')
+      if self.child.x - self.x == 2:
+        self.child.y = self.y
+        self.child.left()
+    # print(f'L{dist}', self, '<<')
 
   def up(self, dist=1):
     """ Move knot up """
-    print(f'>> U{dist}', self)
+    # print(f'>> U{dist}', self)
     for _ in range(dist):
       self.y += 1
       if not self.child:
         self.pos.add((self.y, self.x))
         continue
-      if self.y - self.child.y == 2:
-        print(self, '→', self.child, 'x+U')
-        self.child.x = self.x
-        self.child.up()
-      elif abs(self.x - self.child.x) == 2:
-        print(self, '→', self.child, 'y+', end='')
-        self.child.y = self.y
+      if abs(self.x - self.child.x) == 2:
+        # print(self, '→', self.child, 'y+', end='')
+        if self.child.y == 0:
+          self.child.y = 1
+        else:
+          self.child.y = self.y
         if self.x > self.child.x:
-          print('R')
+          # print('R')
           self.child.right()
         elif self.x < self.child.x:
-          print('L')
+          # print('L')
           self.child.left()
-    print(f'U{dist}', self, '<<')
+      if self.y - self.child.y == 2:
+        # print(self, '→', self.child, 'x+U')
+        self.child.x = self.x
+        self.child.up()
+    # print(f'U{dist}', self, '<<')
 
   def down(self, dist=1):
     """ Move knot down """
-    print(f'>> D{dist}', self)
+    # print(f'>> D{dist}', self)
     for _ in range(dist):
       self.y -= 1
       if not self.child:
         self.pos.add((self.y, self.x))
         continue
-      if self.child.y - self.y == 2:
-        self.child.x = self.x
-        self.child.down()
       if abs(self.x - self.child.x) == 2:
-        self.child.y = self.y
+        if self.child.y == 0:
+          self.child.y = -1
+        else:
+          self.child.y = self.y
         if self.x < self.child.x:
           self.child.right()
         elif self.x > self.child.x:
           self.child.left()
-    print(f'D{dist}', self, '<<')
+      if self.child.y - self.y == 2:
+        self.child.x = self.x
+        self.child.down()
+    # print(f'D{dist}', self, '<<')
 
   def reset(self):
     """ Reset knot and its children coordinates """
@@ -252,8 +263,8 @@ print('part one:', len(rope.positions))
 
 rope = make_rope(10)
 
-def move5():
-  for m in inp:
+def move10():
+  for m in test2:
     d,dist = m.split()
     dist =  int(dist)
     match d:
@@ -274,6 +285,6 @@ def restore():
   rope[3].y, rope[3].x = 1, 2
   rope[4].y, rope[4].x = 1, 1
 
-restore()
-# move5()
-# print('part two:', len(rope.positions))
+# restore()
+move10()
+print('part two:', len(rope.positions))
