@@ -92,9 +92,9 @@ class Knot:
           self.child.x = -1
         else:
           self.child.x = self.x
-        if self.y < self.child.y:
+        if self.y > self.child.y:
           self.child.up()
-        elif self.y > self.child.y:
+        elif self.y < self.child.y:
           self.child.down()
       if self.child.x - self.x == 2:
         self.child.y = self.y
@@ -140,9 +140,9 @@ class Knot:
           self.child.y = -1
         else:
           self.child.y = self.y
-        if self.x < self.child.x:
+        if self.x > self.child.x:
           self.child.right()
-        elif self.x > self.child.x:
+        elif self.x < self.child.x:
           self.child.left()
       if self.child.y - self.y == 2:
         self.child.x = self.x
