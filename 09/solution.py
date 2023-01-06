@@ -1,4 +1,4 @@
-"ini"" Day 09 - Rope Bridge """
+""" Day 09 - Rope Bridge """
 
 with open('input.txt', 'r', encoding='utf-8') as f:
   inp = [ l[:-1] for l in f.readlines() ]
@@ -66,7 +66,7 @@ class Knot:
         if self.child.x == 0:
           self.child.x = 1
         else:
-          self.child.x = self.x
+          self.child.x += 1
         if self.y > self.child.y:
           # print('U')
           self.child.up()
@@ -91,12 +91,12 @@ class Knot:
         if self.child.x == 0:
           self.child.x = -1
         else:
-          self.child.x = self.x
+          self.child.x -= 1
         if self.y > self.child.y:
           self.child.up()
         elif self.y < self.child.y:
           self.child.down()
-      if self.child.x - self.x == 2:
+      elif self.child.x - self.x == 2:
         self.child.y = self.y
         self.child.left()
     # print(f'L{dist}', self, '<<')
@@ -114,14 +114,14 @@ class Knot:
         if self.child.y == 0:
           self.child.y = 1
         else:
-          self.child.y = self.y
+          self.child.y += 1
         if self.x > self.child.x:
           # print('R')
           self.child.right()
         elif self.x < self.child.x:
           # print('L')
           self.child.left()
-      if self.y - self.child.y == 2:
+      elif self.y - self.child.y == 2:
         # print(self, '→', self.child, 'x+U')
         self.child.x = self.x
         self.child.up()
@@ -139,12 +139,12 @@ class Knot:
         if self.child.y == 0:
           self.child.y = -1
         else:
-          self.child.y = self.y
+          self.child.y -= 1
         if self.x > self.child.x:
           self.child.right()
         elif self.x < self.child.x:
           self.child.left()
-      if self.child.y - self.y == 2:
+      elif self.child.y - self.y == 2:
         self.child.x = self.x
         self.child.down()
     # print(f'D{dist}', self, '<<')
@@ -264,7 +264,7 @@ print('part one:', len(rope.positions))
 rope = make_rope(10)
 
 def move10():
-  for m in test2:
+  for m in test:
     d,dist = m.split()
     dist =  int(dist)
     match d:
